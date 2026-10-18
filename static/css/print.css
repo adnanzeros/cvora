@@ -1,0 +1,108 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  body {
+    background: white;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .topbar,
+  .hero-strip,
+  .editor-panel,
+  .preview-toolbar,
+  .assistant-panel,
+  .preview-actions,
+  .save-state,
+  .warning-box,
+  .template-card,
+  .suggestion-row,
+  .add-entry,
+  .remove-entry-btn,
+  .secondary-btn,
+  #togglePreviewBtn,
+  #languageSelector,
+  #exportPdfBtn {
+    display: none !important;
+  }
+
+  .workspace {
+    display: block;
+    margin: 0;
+  }
+
+  .preview-panel {
+    display: block !important;
+    box-shadow: none;
+    border: none;
+    padding: 0;
+    min-height: auto;
+  }
+
+  .cv-preview {
+    display: block;
+    overflow: visible;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .cv-sheet {
+    width: 210mm;
+    max-width: 210mm;
+    min-width: 210mm;
+    border: none;
+    box-shadow: none;
+    margin: 0;
+  }
+
+  .cv-page {
+    page-break-after: always;
+    break-after: page;
+    width: 210mm;
+    height: auto !important;
+    min-height: 297mm;
+    max-height: none;
+    padding: 12mm;
+    box-sizing: border-box;
+    margin: 0;
+    aspect-ratio: auto;
+    overflow: visible;
+  }
+
+  .bangladesh-template .cv-page {
+    page-break-after: always;
+    break-after: page;
+    height: 297mm !important;
+    min-height: 297mm;
+    max-height: 297mm;
+  }
+
+  .cv-page:last-of-type {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  .cv-page + .cv-page {
+    border-top: 0;
+  }
+
+  .cv-hint {
+    display: none !important;
+  }
+
+  .bangladesh-page-1,
+  .bangladesh-page-2 {
+    height: 297mm !important;
+    min-height: 297mm;
+    max-height: 297mm;
+  }
+
+  .bangladesh-page-2 {
+    page-break-before: always;
+    break-before: page;
+  }
+}

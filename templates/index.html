@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand-wrap">
+      <div class="brand-mark">CV</div>
+      <div>
+        <p class="eyebrow">CVora</p>
+        <h1>Create Your Next Opportunity</h1>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="secondary-btn" id="togglePreviewBtn" type="button">Edit / Preview</button>
+      <select id="languageSelector" aria-label="Language selector">
+        <option value="en">English</option>
+        <option value="bn">বাংলা</option>
+      </select>
+      <button class="primary-btn" id="exportPdfBtn" type="button">Export PDF</button>
+    </div>
+  </header>
+
+  <section class="hero-strip">
+    <div class="hero-copy">
+      <span class="featured-pill">Bangladesh • Europe • International • Modern</span>
+      <h2>Design a CV that feels premium and performs in the real world.</h2>
+    </div>
+    <div class="hero-metrics">
+      <div><strong>4</strong><span>Templates</span></div>
+      <div><strong>2</strong><span>Page export</span></div>
+      <div><strong>Auto</strong><span>Save</span></div>
+    </div>
+  </section>
+
+  <main class="workspace" id="workspace">
+    <aside class="panel editor-panel" id="editorPanel">
+      <div class="section-header">
+        <h2>Template</h2>
+      </div>
+      <div class="template-grid">
+        {% for template in templates %}
+        <button class="template-card" type="button" data-template="{{ template.id }}">
+          <span class="template-badge">{{ template.name }}</span>
+          <strong>{{ template.name }}</strong>
+          <small>{{ template.description }}</small>
+        </button>
+        {% endfor %}
+      </div>
+
+      <div class="section-header">
+        <h2>Personal information</h2>
+      </div>
+      <div class="field-grid">
+        <label>Full name<input data-field="fullName" type="text" placeholder="Your full name" /></label>
+        <label>Phone number<input data-field="phone" type="tel" placeholder="+880 1XXX XXX XXX" /></label>
+        <label>Email<input data-field="email" type="email" placeholder="you@example.com" /></label>
+        <label>Father's name<input data-field="fatherName" type="text" /></label>
+        <label>Mother's name<input data-field="motherName" type="text" /></label>
+        <label>Date of birth<input data-field="dob" type="date" /></label>
+        <label>Gender<select data-field="gender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></label>
+        <label>Blood group<input data-field="bloodGroup" type="text" placeholder="A+" /></label>
+        <label>Nationality<input data-field="nationality" type="text" placeholder="Bangladeshi" /></label>
+        <label>Marital status<select data-field="maritalStatus"><option value="">Select</option><option value="Single">Single</option><option value="Married">Married</option><option value="Divorced">Divorced</option></select></label>
+        <label>Religion<input data-field="religion" type="text" placeholder="Optional" /></label>
+        <label>Present address<textarea data-field="presentAddress" rows="2" placeholder="Current address"></textarea></label>
+        <label>Permanent address<textarea data-field="permanentAddress" rows="2" placeholder="Permanent address"></textarea></label>
+      </div>
+
+      <div class="section-header">
+        <h2>Photo</h2>
+      </div>
+      <div class="photo-box">
+        <label class="photo-choose">Choose photo (JPG, PNG, WebP · max 2MB)
+          <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" />
+        </label>
+        <div class="photo-preview" id="photoPreviewWrap">
+          <img id="photoPreview" alt="Uploaded CV photo" />
+          <span id="photoPlaceholder">No photo selected</span>
+        </div>
+        <button class="secondary-btn" id="removePhotoBtn" type="button">Remove photo</button>
+      </div>
+
+      <div class="section-header">
+        <h2>Career objective / summary</h2>
+      </div>
+      <textarea data-field="summary" rows="4" placeholder="Write a concise summary..."></textarea>
+      <div class="suggestion-row" id="summarySuggestions">
+        <button class="suggestion-btn" type="button" data-suggestion="freshgraduate">Fresh graduate</button>
+        <button class="suggestion-btn" type="button" data-suggestion="experienced">Experienced professional</button>
+        <button class="suggestion-btn" type="button" data-suggestion="careerchange">Career change</button>
+      </div>
+
+      <div class="section-header">
+        <h2>Education</h2>
+      </div>
+      <div id="educationList"></div>
+      <button class="secondary-btn add-entry" id="addEducationBtn" type="button">Add education</button>
+
+      <div class="section-header">
+        <h2>Work experience</h2>
+      </div>
+      <div id="experienceList"></div>
+      <button class="secondary-btn add-entry" id="addExperienceBtn" type="button">Add experience</button>
+
+      <div class="section-header">
+        <h2>Projects</h2>
+      </div>
+      <div id="projectList"></div>
+      <button class="secondary-btn add-entry" id="addProjectBtn" type="button">Add project</button>
+
+      <div class="section-header">
+        <h2>Skills</h2>
+      </div>
+      <textarea data-field="skills" rows="4" placeholder="List technical or professional skills"></textarea>
+
+      <div class="section-header">
+        <h2>Language proficiency</h2>
+      </div>
+      <div id="languageList"></div>
+      <button class="secondary-btn add-entry" id="addLanguageBtn" type="button">Add language</button>
+
+      <div class="section-header">
+        <h2>Additional information / training</h2>
+      </div>
+      <textarea data-field="training" rows="3" placeholder="Certifications, trainings, workshops and other qualifications"></textarea>
+
+      <div class="section-header">
+        <h2>Interests & hobbies</h2>
+      </div>
+      <textarea data-field="hobbies" rows="3" placeholder="Reading, travel, volunteering, sport, etc."></textarea>
+
+      <div class="section-header">
+        <h2>References</h2>
+      </div>
+      <div id="referenceList"></div>
+      <button class="secondary-btn add-entry" id="addReferenceBtn" type="button">Add reference</button>
+
+      <div class="section-header">
+        <h2>Declaration</h2>
+      </div>
+      <textarea data-field="declaration" rows="3" placeholder="I hereby declare that the information provided is true..."></textarea>
+
+      <div class="section-header">
+        <h2>Applicant signature</h2>
+      </div>
+      <input data-field="signature" type="text" placeholder="Signature / initials" />
+      <div class="signature-pad-wrap">
+        <span>Or draw a signature</span>
+        <canvas id="signaturePad" width="720" height="180" aria-label="Signature drawing area"></canvas>
+        <button class="secondary-btn" id="clearSignatureBtn" type="button">Clear drawn signature</button>
+      </div>
+
+      <div class="section-header">
+        <h2>Authority signature</h2>
+      </div>
+      <input data-field="authoritySignature" type="text" placeholder="Optional authority signature" />
+
+      <div class="section-header">
+        <h2>Optional personal details</h2>
+      </div>
+      <div class="field-grid compact-fields">
+        <label>Country / target market<select data-field="targetMarket"><option value="Bangladesh">Bangladesh</option><option value="Europe">Europe</option><option value="International">International</option><option value="Modern">Modern</option></select></label>
+        <label>Professional title<input data-field="title" type="text" placeholder="Senior Product Designer" /></label>
+        <label>Target role<input data-field="targetRole" type="text" placeholder="Role you're applying for" /></label>
+        <label>Target country<input data-field="targetCountry" type="text" placeholder="Optional, e.g. Germany" /></label>
+        <label>LinkedIn<input data-field="linkedin" type="text" placeholder="linkedin.com/in/yourname" /></label>
+        <label>Website<input data-field="website" type="text" placeholder="yourportfolio.com" /></label>
+      </div>
+
+      <section class="assistant-panel" aria-labelledby="assistantTitle">
+        <div class="assistant-heading">
+          <div>
+            <span class="assistant-kicker">LOCAL RULE-BASED REVIEW</span>
+            <h2 id="assistantTitle">CV Assistant</h2>
+          </div>
+          <span id="qualityScore" class="quality-score">Reviewing…</span>
+        </div>
+        <p class="assistant-note">Suggestions are generated in your browser from the information you enter. No CV data is sent to an AI service.</p>
+        <div class="assistant-columns">
+          <div>
+            <h3>Review checklist</h3>
+            <ul id="reviewList" class="review-list" aria-live="polite"></ul>
+          </div>
+          <div>
+            <h3>Job description match <span class="optional-label">optional</span></h3>
+            <label class="job-description-label" for="jobDescription">Paste a job description to compare its terms locally.</label>
+            <textarea id="jobDescription" data-field="jobDescription" rows="4" placeholder="Paste job requirements here…"></textarea>
+            <div id="keywordResults" class="keyword-results" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="assistant-suggestion">
+          <div>
+            <strong>Summary starter</strong>
+            <p id="summarySuggestion">Add a target role or skills to get a relevant starter.</p>
+          </div>
+          <button class="secondary-btn" id="useSummarySuggestionBtn" type="button">Use suggestion</button>
+        </div>
+      </section>
+
+      <div class="info-banner" id="validationMessage">Missing required Bangladesh information will be highlighted below.</div>
+      <div class="warning-box" id="warningBox">Some long sections may need to be shortened to maintain a clean layout.</div>
+    </aside>
+
+    <section class="panel preview-panel">
+      <div class="preview-toolbar">
+        <div>
+          <strong id="currentTemplateLabel">Bangladesh Standard CV</strong>
+        </div>
+        <div class="preview-actions">
+          <div class="save-state" id="saveState" role="status">Autosaved</div>
+          <button class="secondary-btn" id="saveNowBtn" type="button">Save Changes</button>
+          <button class="secondary-btn" id="clearDataBtn" type="button">Clear CV Data</button>
+        </div>
+      </div>
+      <div id="cvPreview" class="cv-preview" aria-live="polite"></div>
+    </section>
+  </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js', v='3') }}"></script>
+{% endblock %}
