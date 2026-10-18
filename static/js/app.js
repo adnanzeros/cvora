@@ -15,6 +15,7 @@ function clearSignatureDrawing() {
 
 const defaultState = {
   template: 'bangladesh',
+  pageCount: 2,
   fullName: '',
   phone: '',
   email: '',
@@ -57,6 +58,7 @@ const templateNames = {
   international: 'International Professional CV',
   modern: 'Modern Professional CV'
 };
+const defaultPageCounts = { bangladesh: 2, europe: 1, international: 1, modern: 1 };
 
 const translations = {
   en: {
@@ -114,6 +116,9 @@ function loadState() {
       languages: loaded.languages || cloneData(defaultState.languages),
       references: loaded.references || cloneData(defaultState.references)
     };
+    if (!Object.prototype.hasOwnProperty.call(loaded, 'pageCount')) {
+      merged.pageCount = ({ bangladesh: 2, europe: 1, international: 1, modern: 1 })[merged.template] || 1;
+    }
     merged.experience = merged.experience.map((item) => {
       if (item.startDate || item.endDate || item.currentlyWorking !== undefined) return item;
       const years = String(item.period || '').match(/\b(?:19|20)\d{2}\b/g) || [];
@@ -532,6 +537,10 @@ function renderAssistant() {
 function setTemplate(templateId) {
   if (!Object.prototype.hasOwnProperty.call(templateNames, templateId)) return;
   state.template = templateId;
+  state.pageCount = defaultPageCounts[templateId];
+  const pageCountSelector = document.getElementById('pageCountSelector');
+  if (pageCountSelector) pageCountSelector.value = String(state.pageCount);
+  updatePageCountLabel();
   const cards = document.querySelectorAll('.template-card');
   cards.forEach((card) => card.classList.toggle('active', card.dataset.template === templateId));
   document.getElementById('currentTemplateLabel').textContent = templateNames[templateId] || 'CV Template';
@@ -539,6 +548,12 @@ function setTemplate(templateId) {
   renderPreview();
   validateTemplate();
   renderAssistant();
+}
+
+function updatePageCountLabel() {
+  const count = Number(state.pageCount) === 2 ? 2 : 1;
+  const badge = document.getElementById('previewPageCount');
+  if (badge) badge.textContent = `${count}-page PDF`;
 }
 
 function formatWorkPeriod(item) {
@@ -1105,19 +1120,40 @@ function bindEvents() {
     renderPreview();
   });
 
-  document.getElementById('exportPdfBtn')?.addEventListener('click', () => {
-    if (state.template === 'bangladesh' && window.cvoraAnalysis?.pageCount !== 2) {
-      alert('The Bangladesh template must contain exactly two pages. Please review the preview before printing.');
-      return;
+  document.getElementById('pageCountSelector')?.addEventListener('change', (event) => {
+    state.pageCount = Number(event.target.value) === 2 ? 2 : 1;
+    updatePageCountLabel();
+    persistState();
+  });
+  document.getElementById('exportPdfBtn')?.addEventListener('click', async () => {
+    const button = document.getElementById('exportPdfBtn');
+    const originalLabel = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Creating PDF…';
+    try {
+      const response = await fetch('/export-pdf', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(state)
+      });
+      if (!response.ok) {
+        const result = await response.json().catch(() => ({}));
+        throw new Error(result.error || 'PDF export failed. Please try again.');
+      }
+      const pdfUrl = URL.createObjectURL(await response.blob());
+      const link = document.createElement('a');
+      link.href = pdfUrl;
+      link.download = `${String(state.fullName || 'cvora-cv').trim().replace(/[^\w-]+/g, '-')}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(pdfUrl), 60000);
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      button.disabled = false;
+      button.textContent = originalLabel;
     }
-    if (state.template === 'bangladesh' && window.cvoraAnalysis?.overflowing) {
-      alert('The Bangladesh CV content does not fit legibly in two pages. Shorten or reorganize the highlighted content before exporting; no content will be removed automatically.');
-      return;
-    }
-    if (state.template === 'bangladesh' && window.cvoraAnalysis?.recommendations.length) {
-      if (!window.confirm('The CV Assistant found items to review. Print the CV anyway?')) return;
-    }
-    window.print();
   });
 }
 
@@ -1129,6 +1165,10 @@ window.addEventListener('resize', () => {
 function initialize() {
   bindEvents();
   document.getElementById('currentTemplateLabel').textContent = templateNames[state.template] || 'CV Template';
+  state.pageCount = Number(state.pageCount) === 2 ? 2 : 1;
+  const pageCountSelector = document.getElementById('pageCountSelector');
+  if (pageCountSelector) pageCountSelector.value = String(state.pageCount);
+  updatePageCountLabel();
   document.querySelectorAll('.template-card').forEach((card) => {
     card.classList.toggle('active', card.dataset.template === state.template);
   });

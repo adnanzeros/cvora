@@ -48,6 +48,18 @@
       </div>
 
       <div class="section-header">
+        <h2>Page count</h2>
+      </div>
+      <label class="page-count-control" for="pageCountSelector">
+        Pages in your PDF
+        <select id="pageCountSelector" aria-describedby="pageCountHelp">
+          <option value="1">1 page</option>
+          <option value="2">2 pages</option>
+        </select>
+        <small id="pageCountHelp">Default: Bangladesh 2 pages; Europe and International 1 page.</small>
+      </label>
+
+      <div class="section-header">
         <h2>Personal information</h2>
       </div>
       <div class="field-grid">
@@ -205,6 +217,7 @@
       <div class="preview-toolbar">
         <div>
           <strong id="currentTemplateLabel">Bangladesh Standard CV</strong>
+          <span class="page-count-badge" id="previewPageCount">2-page PDF</span>
         </div>
         <div class="preview-actions">
           <div class="save-state" id="saveState" role="status">Autosaved</div>

@@ -413,6 +413,184 @@ label[style*="grid-column: 1 / -1"] {
   padding: 0 4px;
 }
 
+.page-count-control {
+  display: grid;
+  gap: 7px;
+  max-width: 320px;
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.page-count-control small {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.page-count-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(103, 232, 249, 0.1);
+  color: var(--primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
+/* Keep the CV itself dense, legible, and full-width across all template families. */
+.cv-sheet {
+  width: 794px;
+  min-width: 794px;
+}
+
+.cv-page,
+.europe-template .cv-page,
+.international-template .cv-page,
+.modern-template .cv-page {
+  padding: 30px 32px;
+}
+
+.bangladesh-header {
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.bangladesh-header h2 {
+  font-size: 1.9rem;
+  letter-spacing: 0.015em;
+}
+
+.bangladesh-header .contact-list {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 3px 12px;
+  margin-top: 7px;
+}
+
+.photo-frame {
+  width: 112px;
+  height: 124px;
+}
+
+.bangladesh-grid {
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.62fr);
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.meta-box {
+  padding: 7px 9px;
+  margin-bottom: 7px;
+}
+
+.meta-box h3,
+.section-block h3 {
+  font-size: 0.78rem;
+  letter-spacing: 0.055em;
+}
+
+.meta-table {
+  gap: 4px;
+  font-size: 0.74rem;
+}
+
+.meta-row {
+  grid-template-columns: 78px minmax(0, 1fr);
+  gap: 5px;
+}
+
+.section-block {
+  margin-bottom: 10px;
+}
+
+.section-block h3 {
+  padding-bottom: 4px;
+  margin-bottom: 5px;
+}
+
+.section-block p,
+.section-block li,
+.section-block td,
+.section-block th {
+  font-size: 0.78rem;
+  line-height: 1.38;
+}
+
+.entry-list,
+.skill-list,
+.lang-list,
+.ref-list {
+  gap: 5px;
+}
+
+.entry-item {
+  gap: 2px;
+}
+
+.entry-item strong,
+.lang-item strong {
+  font-size: 0.79rem;
+}
+
+.entry-meta {
+  gap: 5px;
+  font-size: 0.7rem;
+}
+
+.core-header {
+  gap: 12px;
+  padding-bottom: 9px;
+  margin-bottom: 10px;
+}
+
+.core-header h2 {
+  font-size: 1.8rem;
+  line-height: 1.12;
+}
+
+.core-meta {
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+
+.two-column {
+  grid-template-columns: minmax(175px, 0.72fr) minmax(0, 1.6fr);
+  gap: 16px;
+}
+
+.side-panel {
+  padding: 8px 12px 0 0;
+}
+
+.side-panel .section-block {
+  margin-bottom: 10px;
+}
+
+.signature-line {
+  margin-top: 12px;
+}
+
+@media (max-width: 560px) {
+  .cv-page,
+  .europe-template .cv-page,
+  .international-template .cv-page,
+  .modern-template .cv-page {
+    padding: 20px 18px;
+  }
+
+  .bangladesh-grid,
+  .two-column {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bangladesh-header .contact-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .save-state {
   color: var(--success);
   font-size: 0.85rem;

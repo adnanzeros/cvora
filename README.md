@@ -1,6 +1,6 @@
 # CVora
 
-CVora is a Flask-based CV builder designed for Bangladesh-standard, European-style, international, and modern professional resumes. It provides a responsive editor, live preview, local browser autosave, and PDF export via the browser print workflow.
+CVora is a Flask-based CV builder designed for Bangladesh-standard, European-style, international, and modern professional resumes. It provides a responsive editor, live preview, local browser autosave, and PDF export generated in Python with ReportLab.
 
 ## Features
 
@@ -15,7 +15,9 @@ CVora is a Flask-based CV builder designed for Bangladesh-standard, European-sty
 - Repeatable education, employment, projects, languages, and references with move/remove controls
 - Drawn or typed applicant signature, plus an independent optional authority signature
 - Mobile Edit / Preview switch and A4-ratio document previews
-- Browser print-to-PDF flow with A4-specific print styles
+- Python-generated A4 PDF export with a selectable one or two page limit
+- Default page counts: Bangladesh 2; Europe, International, and Modern 1
+- Export refuses content that exceeds the selected page limit, so text is not silently dropped
 
 ## Reference PDF status
 
@@ -63,7 +65,7 @@ cvora/
 
 ## PDF generation notes
 
-The app uses the browser print dialog (`window.print()`) with dedicated A4 print styles. Choose “Save as PDF” in the browser's print destination. For the Bangladesh template, the app keeps two document pages and refuses to print if its page-fit check detects overflow. Always review the browser's final print preview because browser and system font metrics can differ.
+The live editor preview updates as you type. Export sends the current CV data to the local Flask server, which builds an A4 PDF with ReportLab and returns it as a download. The page-count selector defaults to two pages for Bangladesh and one for Europe and International. If the content does not fit the selected limit, export reports the issue and asks the user to shorten content or select two pages. A local Unicode font is used when available; otherwise ReportLab's built-in font is used.
 
 ## Local CV Assistant and privacy
 
@@ -81,7 +83,7 @@ pytest
 ## Known limitations
 
 - The exact Bangladesh reference PDF was not available in this workspace.
-- A browser print flow depends on the browser's PDF engine and system fonts.
+- PDF font coverage and Bengali shaping depend on the fonts available on the host. Review Bangla text in the exported PDF before use.
 - LocalStorage is browser-specific and not synchronized across devices.
 - Full Bangla font shaping may vary by operating system and browser.
 - The local keyword matcher uses simple English token matching and is not an AI reviewer or ATS simulator.
